@@ -14,7 +14,7 @@ make command can be run in the background at a time. Arguments passed to the
 To display the status of the currently running make command, use the
 ":AsyncMakeShow" command.
 
-To cancel the currently running make command, use the ":AsyncMakeStop" command. 
+To cancel the currently running make command, use the ":AsyncMakeStop" command.
 
 When a make is running in the background, if you quit Vim, then the make
 process will be terminated.
