@@ -83,7 +83,7 @@ endfu
 fu! s:expand_cmd_special(string) abort "{{{1
     return substitute(a:string, s:EXPANDABLE, '\=s:expand(submatch(0))', 'g')
 endfu
-" Expand special characters in the command line (:help cmdline-special)
+" Expand special characters in the command-line (:help cmdline-special)
 " Leveraged from the dispatch.vim plugin
 let s:flags      = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*'
 let s:EXPANDABLE = '\\*\%(<\w\+>\|%\|#\d*\)'.s:flags
