@@ -43,7 +43,18 @@ fu! asyncmake#async_make(args) abort "{{{1
     \        'lines': ['Make command (' . s:make_cmd . ') output']})
     let qfid = getqflist({'nr':'$', 'id':0}).id
 
-    let s:make_job = job_start(s:make_cmd, {
+    " Why starting a shell to run the command?{{{
+    "
+    " The command may be passed filenames as arguments.
+    " Those could be quoted to be protected from the shell, in case they contain
+    " special characters.
+    "
+    " If you don't  start a shell, the  quotes won't be removed,  and `$ pandoc`
+    " will try to find files whose literal names contain quotes.
+    "
+    " It won't find them, and the compilation will fail.
+    "}}}
+    let s:make_job = job_start(['/bin/sh', '-c', s:make_cmd], {
     \       'callback': function('s:make_process_output', [qfid]),
     \       'close_cb': function('s:make_close_cb', [qfid]),
     \       'exit_cb':  function('s:make_completed'),
@@ -85,7 +96,7 @@ fu! s:expand_cmd_special(string) abort "{{{1
 endfu
 " Expand special characters in the command-line (:help cmdline-special)
 " Leveraged from the dispatch.vim plugin
-let s:flags      = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*'
+let s:flags = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*\%(:S\)\='
 let s:EXPANDABLE = '\\*\%(<\w\+>\|%\|#\d*\)'.s:flags
 
 fu! s:make_close_cb(qf_id, channel) abort "{{{1
