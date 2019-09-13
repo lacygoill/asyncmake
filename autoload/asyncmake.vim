@@ -49,7 +49,7 @@ fu! asyncmake#async_make(args) abort "{{{1
     " Those could be quoted to be protected from the shell, in case they contain
     " special characters.
     "
-    " If you don't  start a shell, the  quotes won't be removed,  and `$ pandoc`
+    " If you don't  start a shell, the quotes won't  be removed, and `pandoc(1)`
     " will try to find files whose literal names contain quotes.
     "
     " It won't find them, and the compilation will fail.
