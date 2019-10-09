@@ -21,7 +21,7 @@ fu! asyncmake#async_make(args) abort "{{{1
     let s:make_cmd = &makeprg
 
     " Replace $* (if present) in 'makeprg' with the supplied arguments
-    if match(s:make_cmd, '\$\*') !=# -1
+    if match(s:make_cmd, '\$\*') != -1
         let s:make_cmd = substitute(s:make_cmd, '\$\*', a:args, 'g')
     else
         if !empty(a:args)
@@ -116,17 +116,17 @@ fu! s:make_close_cb(qf_id, channel) abort "{{{1
 
     " Add the exit status message if the quickfix list is still present
     let l = getqflist({'id': a:qf_id})
-    if has_key(l, 'id') && l.id ==# a:qf_id
+    if has_key(l, 'id') && l.id == a:qf_id
         call setqflist([], 'a', {'id': a:qf_id, 'lines': [emsg]})
 
         " Open the quickfix list if make exited with a non-zero value
-        if exitval !=# 0
+        if exitval != 0
             let save_wid = win_getid()
             copen
             " Jump to the correct quickfix list
             let cur_qfnr = getqflist({'nr': 0}).nr
             let tgt_qfnr = getqflist({'id': a:qf_id, 'nr': 0}).nr
-            if cur_qfnr !=# tgt_qfnr
+            if cur_qfnr != tgt_qfnr
                 if tgt_qfnr > cur_qfnr
                     exe 'cnewer '.(tgt_qfnr - cur_qfnr)
                 else
@@ -152,7 +152,7 @@ fu! s:make_process_output(qfid, channel, msg) abort "{{{1
 
     " Make sure the quickfix list is still present
     let l = getqflist({'id': a:qfid})
-    if l.id !=# a:qfid
+    if l.id != a:qfid
         echom 'Quickfix list not found, stopping the make'
         call job_stop(ch_getjob(a:channel))
         return
