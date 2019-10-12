@@ -7,7 +7,7 @@ let s:make_cmd = ''
 " vim -es +'set nonu nornu | vimgrep /$*/ ** | cw | %p | qa'
 " let &mp = "vim -Nu NONE -es +'set nonu nornu | vimgrep /$*/ ~/.vim/** | cw | 1,$p | qa'"
 
-fu! asyncmake#async_make(args) abort "{{{1
+fu asyncmake#async_make(args) abort "{{{1
 " Run a make command and process the output asynchronously.
 " Only one make command can be run in the background.
     if !empty(s:make_cmd)
@@ -72,7 +72,7 @@ fu! asyncmake#async_make(args) abort "{{{1
     let s:make_efm = &efm
 endfu
 
-fu! asyncmake#cancel_make() abort "{{{1
+fu asyncmake#cancel_make() abort "{{{1
 " Stop a make command if it is running
     if empty(s:make_cmd)
         echo '[asyncmake] Make is not running'
@@ -83,7 +83,7 @@ fu! asyncmake#cancel_make() abort "{{{1
     echom 'Make command ('.s:make_cmd.') is stopped'
 endfu
 
-fu! s:expand(string) abort "{{{1
+fu s:expand(string) abort "{{{1
     " Backslashes in 'makeprg' are escaped twice. Refer to :help 'makeprg'
     " for details. Reduce the number of backslashes by two.
     let slashes = len(matchstr(a:string, '^\%(\\\\\)*'))
@@ -91,7 +91,7 @@ fu! s:expand(string) abort "{{{1
     return v
 endfu
 
-fu! s:expand_cmd_special(string) abort "{{{1
+fu s:expand_cmd_special(string) abort "{{{1
     return substitute(a:string, s:EXPANDABLE, '\=s:expand(submatch(0))', 'g')
 endfu
 " Expand special characters in the command-line (:help cmdline-special)
@@ -99,7 +99,7 @@ endfu
 let s:flags = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*\%(:S\)\='
 let s:EXPANDABLE = '\\*\%(<\w\+>\|%\|#\d*\)'.s:flags
 
-fu! s:make_close_cb(qf_id, channel) abort "{{{1
+fu s:make_close_cb(qf_id, channel) abort "{{{1
 " s:make_close_cb
 " Close callback for the make command channel. No more output is available.
     let job = ch_getjob(a:channel)
@@ -138,14 +138,14 @@ fu! s:make_close_cb(qf_id, channel) abort "{{{1
     endif
 endfu
 
-fu! s:make_completed(job, exitStatus) abort "{{{1
+fu s:make_completed(job, exitStatus) abort "{{{1
 " s:make_completed
 " Make command completion handler
     echom 'Make ('.s:make_cmd.') completed'
     let s:make_cmd = ''
 endfu
 
-fu! s:make_process_output(qfid, channel, msg) abort "{{{1
+fu s:make_process_output(qfid, channel, msg) abort "{{{1
 " s:make_process_output
 " Make command output handler.  Process part of the make command output and
 " add the output to a quickfix list.
@@ -167,7 +167,7 @@ fu! s:make_process_output(qfid, channel, msg) abort "{{{1
     lcd -
 endfu
 
-fu! asyncmake#show_make() abort "{{{1
+fu asyncmake#show_make() abort "{{{1
     if empty(s:make_cmd)
         echo '[asyncmake] Make is not running'
         return
