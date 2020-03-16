@@ -14,7 +14,7 @@ fu asyncmake#async_make(args) abort "{{{1
         try
             throw '[asyncmake] A make command is already running'
         catch
-            call lg#catch_error()
+            call lg#catch()
         endtry
     endif
 
@@ -63,7 +63,7 @@ fu asyncmake#async_make(args) abort "{{{1
         try
             throw '[asyncmake] Failed to run ('.s:make_cmd.')'
         catch
-            return lg#catch_error()
+            return lg#catch()
         endtry
         let s:make_cmd = ''
         return
@@ -107,7 +107,7 @@ fu s:make_close_cb(qf_id, channel) abort "{{{1
         try
             throw '[asyncmake] Job not found in make channel close callback'
         catch
-            return lg#catch_error()
+            return lg#catch()
         endtry
         return
     endif
