@@ -11,11 +11,7 @@ fu asyncmake#async_make(args) abort "{{{1
 " Run a make command and process the output asynchronously.
 " Only one make command can be run in the background.
     if !empty(s:make_cmd)
-        try
-            throw '[asyncmake] A make command is already running'
-        catch
-            call lg#catch()
-        endtry
+        return s:warn('[asyncmake] A make command is already running')
     endif
 
     let s:make_cmd = &makeprg
@@ -60,11 +56,7 @@ fu asyncmake#async_make(args) abort "{{{1
     \       'exit_cb':  function('s:make_completed'),
     \       'in_io':    'null'})
     if job_status(s:make_job) is# 'fail'
-        try
-            throw '[asyncmake] Failed to run ('.s:make_cmd.')'
-        catch
-            return lg#catch()
-        endtry
+        call s:warn('[asyncmake] Failed to run ('.s:make_cmd.')')
         let s:make_cmd = ''
         return
     endif
@@ -104,12 +96,7 @@ fu s:make_close_cb(qf_id, channel) abort "{{{1
 " Close callback for the make command channel. No more output is available.
     let job = ch_getjob(a:channel)
     if job_status(job) is# 'fail'
-        try
-            throw '[asyncmake] Job not found in make channel close callback'
-        catch
-            return lg#catch()
-        endtry
-        return
+        return s:warn('[asyncmake] Job not found in make channel close callback')
     endif
     let exitval = job_info(job).exitval
     let emsg = '[Make command exited with status ' . exitval . ']'
@@ -173,5 +160,11 @@ fu asyncmake#show_make() abort "{{{1
         return
     endif
     echo '[asyncmake] Make command('. s:make_cmd.') is running'
+endfu
+
+fu s:warn(msg) abort "{{{1
+    echohl WarningMsg
+    echo a:msg
+    echohl NONE
 endfu
 
