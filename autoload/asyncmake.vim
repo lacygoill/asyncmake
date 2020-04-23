@@ -78,7 +78,7 @@ endfu
 fu s:expand(string) abort "{{{1
     " Backslashes in 'makeprg' are escaped twice. Refer to :help 'makeprg'
     " for details. Reduce the number of backslashes by two.
-    let slashes = len(matchstr(a:string, '^\%(\\\\\)*'))
+    let slashes = strlen(matchstr(a:string, '^\%(\\\\\)*'))
     sandbox let v = repeat('\', slashes/2) . expand(a:string[slashes : -1])
     return v
 endfu
