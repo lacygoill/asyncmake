@@ -4,8 +4,8 @@ endif
 let g:autoloaded_asyncmake = 1
 
 let s:make_cmd = ''
-" vim -es +'set nonu nornu | vimgrep /$*/ ** | cw | %p | qa'
-" let &mp = "vim -Nu NONE -es +'set nonu nornu | vimgrep /$*/ ~/.vim/** | cw | 1,$p | qa'"
+"     $ vim -es +'set nonu nornu | vimgrep /$*/ ** | cw | %p | qa'
+"     let &mp = "vim -Nu NONE -es +'set nonu nornu | vimgrep /$*/ ~/.vim/** | cw | 1,$p | qa'"
 
 fu asyncmake#async_make(args) abort "{{{1
 " Run a make command and process the output asynchronously.
@@ -35,8 +35,8 @@ fu asyncmake#async_make(args) abort "{{{1
 
     " Create a new quickfix list at the end of the stack
     call setqflist([], ' ', {'nr': '$',
-    \        'title': s:make_cmd,
-    \        'lines': ['Make command (' . s:make_cmd . ') output']})
+        \ 'title': s:make_cmd,
+        \ 'lines': ['Make command (' . s:make_cmd . ') output']})
     let qfid = getqflist({'nr':'$', 'id':0}).id
 
     " Why starting a shell to run the command?{{{
@@ -51,10 +51,10 @@ fu asyncmake#async_make(args) abort "{{{1
     " It won't find them, and the compilation will fail.
     "}}}
     let s:make_job = job_start(['/bin/sh', '-c', s:make_cmd], {
-    \       'callback': function('s:make_process_output', [qfid]),
-    \       'close_cb': function('s:make_close_cb', [qfid]),
-    \       'exit_cb':  function('s:make_completed'),
-    \       'in_io':    'null'})
+        \ 'callback': function('s:make_process_output', [qfid]),
+        \ 'close_cb': function('s:make_close_cb', [qfid]),
+        \ 'exit_cb':  function('s:make_completed'),
+        \ 'in_io':    'null'})
     if job_status(s:make_job) is# 'fail'
         call s:warn('[asyncmake] Failed to run ('.s:make_cmd.')')
         let s:make_cmd = ''
@@ -149,8 +149,8 @@ fu s:make_process_output(qfid, channel, msg) abort "{{{1
     " change to the original direcotry of the make command.
     exe 'lcd ' . s:make_dir
     call setqflist([], 'a', {'id':a:qfid,
-    \        'lines': [a:msg],
-    \        'efm': s:make_efm})
+        \ 'lines': [a:msg],
+        \ 'efm': s:make_efm})
     lcd -
 endfu
 
