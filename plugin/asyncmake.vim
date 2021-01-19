@@ -1,8 +1,8 @@
-if exists('loaded_asyncmake')
-    finish
-endif
-let loaded_asyncmake = 1
+vim9 noclear
 
-com -bar -nargs=* -complete=file AsyncMake     call asyncmake#async_make(<q-args>)
-com -bar                         AsyncMakeShow call asyncmake#show_make()
-com -bar                         AsyncMakeStop call asyncmake#cancel_make(<args>)
+if exists('loaded') | finish | endif
+var loaded = true
+
+com -bar -nargs=* -complete=file AsyncMake     asyncmake#asyncMake(<q-args>)
+com -bar                         AsyncMakeShow asyncmake#showMake()
+com -bar                         AsyncMakeStop asyncmake#cancelMake(<args>)
