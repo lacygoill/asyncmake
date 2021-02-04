@@ -17,7 +17,7 @@ def asyncmake#asyncMake(args: string) #{{{2
     make_cmd = &makeprg
 
     # Replace $* (if present) in 'makeprg' with the supplied arguments
-    if match(make_cmd, '\$\*') != -1
+    if match(make_cmd, '\$\*') >= 0
         make_cmd = substitute(make_cmd, '\$\*', args, 'g')
     else
         if !empty(args)
