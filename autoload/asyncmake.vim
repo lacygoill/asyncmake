@@ -3,7 +3,7 @@ vim9script noclear
 if exists('loaded') | finish | endif
 var loaded = true
 
-var make_cmd = ''
+var make_cmd: string = ''
 
 # Interface {{{1
 def asyncmake#asyncMake(args: string) #{{{2
@@ -95,17 +95,22 @@ def Expand(string: string): string #{{{2
     # Backslashes in `'makeprg'` are escaped  twice.  See `:h 'mp'` for details.
     # Reduce the number of backslashes by two.
     var slashes: number = matchstr(string, '^\%(\\\\\)*')->strlen()
-    sandbox var v = repeat('\', slashes / 2) .. expand(string[slashes : -1])
+    sandbox var v: string = repeat('\', slashes / 2) .. expand(string[slashes : -1])
     return v
 enddef
 
 def ExpandCmdSpecial(string: string): string #{{{2
-    return substitute(string, EXPANDABLE, (m) => m[0]->Expand(), 'g')
+    return substitute(
+        string,
+        EXPANDABLE,
+        (m: list<string>): string => m[0]->Expand(),
+        'g'
+    )
 enddef
 # Expand special characters in the command-line (:help cmdline-special)
 # Leveraged from the dispatch.vim plugin
-var flags = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*\%(:S\)\='
-var EXPANDABLE = '\\*\%(<\w\+>\|%\|#\d*\)' .. flags
+var flags: string = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*\%(:S\)\='
+var EXPANDABLE: string = '\\*\%(<\w\+>\|%\|#\d*\)' .. flags
 
 def MakeCloseCb(qf_id: number, channel: channel) #{{{2
 # Close callback for the make command channel.  No more output is available.
