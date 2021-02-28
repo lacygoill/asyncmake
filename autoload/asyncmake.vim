@@ -146,7 +146,7 @@ def MakeCloseCb(qf_id: number, channel: channel) #{{{2
     endif
 enddef
 
-def MakeCompleted(job: job, _: any) #{{{2
+def MakeCompleted(...l: any) #{{{2
 # Make command completion handler
     echom 'Make (' .. make_cmd .. ') completed'
     make_cmd = ''
