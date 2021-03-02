@@ -18,7 +18,7 @@ def asyncmake#asyncMake(args: string) #{{{2
 
     # Replace $* (if present) in 'makeprg' with the supplied arguments
     if match(make_cmd, '\$\*') >= 0
-        make_cmd = substitute(make_cmd, '\$\*', args, 'g')
+        make_cmd = make_cmd->substitute('\$\*', args, 'g')
     else
         if !empty(args)
             make_cmd ..= ' ' .. args
@@ -95,17 +95,16 @@ def Expand(string: string): string #{{{2
     # Backslashes in `'makeprg'` are escaped  twice.  See `:h 'mp'` for details.
     # Reduce the number of backslashes by two.
     var slashes: number = matchstr(string, '^\%(\\\\\)*')->strlen()
-    sandbox var v: string = repeat('\', slashes / 2) .. expand(string[slashes : -1])
-    return v
+    sandbox var s: string = repeat('\', slashes / 2) .. expand(string[slashes : -1])
+    return s
 enddef
 
 def ExpandCmdSpecial(string: string): string #{{{2
-    return substitute(
-        string,
-        EXPANDABLE,
-        (m: list<string>): string => m[0]->Expand(),
-        'g'
-    )
+    return string
+            ->substitute(
+                EXPANDABLE,
+                (m: list<string>): string => m[0]->Expand(),
+                'g')
 enddef
 # Expand special characters in the command-line (:help cmdline-special)
 # Leveraged from the dispatch.vim plugin
