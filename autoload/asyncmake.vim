@@ -26,7 +26,7 @@ def asyncmake#asyncMake(args: string) #{{{2
     endif
 
     # Replace cmdline-special characters
-    make_cmd = ExpandCmdSpecial(make_cmd)
+    make_cmd = expandcmd(make_cmd)
 
     # Save all the modified buffers if 'autowrite' or 'autowriteall' is set
     if &autowrite || &autowriteall
@@ -91,26 +91,6 @@ def asyncmake#showMake() #{{{2
 enddef
 #}}}1
 # Core {{{1
-def Expand(string: string): string #{{{2
-    # Backslashes in `'makeprg'` are escaped  twice.  See `:h 'mp'` for details.
-    # Reduce the number of backslashes by two.
-    var slashes: number = matchstr(string, '^\%(\\\\\)*')->strlen()
-    sandbox var s: string = repeat('\', slashes / 2) .. expand(string[slashes : -1])
-    return s
-enddef
-
-def ExpandCmdSpecial(string: string): string #{{{2
-    return string
-            ->substitute(
-                EXPANDABLE,
-                (m: list<string>): string => m[0]->Expand(),
-                'g')
-enddef
-# Expand special characters in the command-line (:help cmdline-special)
-# Leveraged from the dispatch.vim plugin
-var flags: string = '<\=\%(:[p8~.htre]\|:g\=s\(.\).\{-\}\1.\{-\}\1\)*\%(:S\)\='
-var EXPANDABLE: string = '\\*\%(<\w\+>\|%\|#\d*\)' .. flags
-
 def MakeCloseCb(qf_id: number, channel: channel) #{{{2
 # Close callback for the make command channel.  No more output is available.
     var job: job = ch_getjob(channel)
