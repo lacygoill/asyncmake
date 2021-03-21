@@ -103,7 +103,7 @@ def MakeCloseCb(qf_id: number, channel: channel) #{{{2
 
     # Add the exit status message if the quickfix list is still present
     var l: dict<any> = getqflist({id: qf_id})
-    if has_key(l, 'id') && l.id == qf_id
+    if l->has_key('id') && l.id == qf_id
         setqflist([], 'a', {id: qf_id, lines: [emsg]})
 
         # Open the quickfix list if make exited with a non-zero value
