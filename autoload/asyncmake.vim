@@ -38,7 +38,7 @@ def asyncmake#asyncMake(args: string) #{{{2
         nr: '$',
         title: make_cmd,
         lines: ['Make command (' .. make_cmd .. ') output']
-        })
+    })
     var qfid: number = getqflist({nr: '$', id: 0}).id
 
     # Why starting a shell to run the command?{{{
@@ -57,7 +57,7 @@ def asyncmake#asyncMake(args: string) #{{{2
         close_cb: function(MakeCloseCb, [qfid]),
         exit_cb: MakeCompleted,
         in_io: 'null'
-        })
+    })
     if job_status(make_job) == 'fail'
         Warn('[asyncmake] Failed to run (' .. make_cmd .. ')')
         make_cmd = ''
@@ -125,13 +125,17 @@ def MakeCloseCb(qf_id: number, channel: channel) #{{{2
     endif
 enddef
 
-def MakeCompleted(...l: any) #{{{2
+def MakeCompleted(_, _) #{{{2
 # Make command completion handler
     echom 'Make (' .. make_cmd .. ') completed'
     make_cmd = ''
 enddef
 
-def MakeProcessOutput(qfid: number, channel: channel, msg: string) #{{{2
+def MakeProcessOutput( #{{{2
+    qfid: number,
+    channel: channel,
+    msg: string
+)
 # Make command output handler.  Process part of the make command output and
 # add the output to a quickfix list.
 
