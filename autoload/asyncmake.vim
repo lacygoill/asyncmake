@@ -64,11 +64,11 @@ def asyncmake#asyncMake(args: string) #{{{2
         return
     endif
     make_dir = getcwd()
-    make_efm = &efm
+    make_errorformat = &errorformat
 enddef
 
 var make_dir: string = getcwd()
-var make_efm: string
+var make_errorformat: string
 var make_job: job
 
 def asyncmake#cancelMake() #{{{2
@@ -153,7 +153,8 @@ def MakeProcessOutput( #{{{2
     setqflist([], 'a', {
         id: qfid,
         lines: [msg],
-        efm: make_efm})
+        efm: make_errorformat
+    })
     lcd -
 enddef
 
