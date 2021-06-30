@@ -30,7 +30,7 @@ def asyncmake#asyncMake(args: string) #{{{2
 
     # Save all the modified buffers if 'autowrite' or 'autowriteall' is set
     if &autowrite || &autowriteall
-         sil! wall
+         silent! wall
     endif
 
     # Create a new quickfix list at the end of the stack
@@ -79,7 +79,7 @@ def asyncmake#cancelMake() #{{{2
     endif
 
     job_stop(make_job)
-    echom 'Make command (' .. make_cmd .. ') is stopped'
+    echomsg 'Make command (' .. make_cmd .. ') is stopped'
 enddef
 
 def asyncmake#showMake() #{{{2
@@ -115,9 +115,9 @@ def MakeCloseCb(qf_id: number, channel: channel) #{{{2
             var tgt_qfnr: number = getqflist({id: qf_id, nr: 0}).nr
             if cur_qfnr != tgt_qfnr
                 if tgt_qfnr > cur_qfnr
-                    exe 'cnewer ' .. (tgt_qfnr - cur_qfnr)
+                    execute 'cnewer ' .. (tgt_qfnr - cur_qfnr)
                 else
-                    exe 'colder' .. (cur_qfnr - tgt_qfnr)
+                    execute 'colder' .. (cur_qfnr - tgt_qfnr)
                 endif
             endif
             win_gotoid(save_wid)
@@ -127,7 +127,7 @@ enddef
 
 def MakeCompleted(_, _) #{{{2
 # Make command completion handler
-    echom 'Make (' .. make_cmd .. ') completed'
+    echomsg 'Make (' .. make_cmd .. ') completed'
     make_cmd = ''
 enddef
 
@@ -142,14 +142,14 @@ def MakeProcessOutput( #{{{2
     # Make sure the quickfix list is still present
     var l: dict<any> = getqflist({id: qfid})
     if l.id != qfid
-        echom 'Quickfix list not found, stopping the make'
+        echomsg 'Quickfix list not found, stopping the make'
         ch_getjob(channel)->job_stop()
         return
     endif
 
     # The user or some other plugin might have changed the directory,
     # change to the original direcotry of the make command.
-    exe 'lcd ' .. make_dir
+    execute 'lcd ' .. make_dir
     setqflist([], 'a', {
         id: qfid,
         lines: [msg],
@@ -160,7 +160,7 @@ enddef
 
 def Warn(msg: string) #{{{2
     echohl WarningMsg
-    echom msg
+    echomsg msg
     echohl NONE
 enddef
 
