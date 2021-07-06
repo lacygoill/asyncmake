@@ -1,8 +1,5 @@
 vim9script noclear
 
-if exists('loaded') | finish | endif
-var loaded = true
-
 var make_cmd: string = ''
 
 # Interface {{{1
